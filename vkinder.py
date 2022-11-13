@@ -9,6 +9,10 @@ longpoll = VkLongPoll(vk)
 session = Session()
 connection = engine.connect()
 
+class User(Base):
+    __tablename__ = 'user'
+    id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
+    vk_id = sq.Column(sq.Integer, unique=True)
 
 def loop_bot():
     for this_event in longpoll.listen():
