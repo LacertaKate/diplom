@@ -23,12 +23,12 @@ def menu_bot(id_num):
               f"\nЕсли вы используете его первый раз - пройдите регистрацию.\n"
               f"Для регистрации введите - Да.\n"
               f"Если вы уже зарегистрированы - начинайте поиск.\n"
-              f"\nДля поиска - мучжина 25-30 Санкт-Петербург\n")
+              f"\nДля поиска - мужчина 25-30 Санкт-Петербург\n")
 
 
 def show_info():
     write_msg(user_id, f'Это была последняя анкета.'
-                       f'Поиск - мужчина 25-30 Москва'
+                       f'Поиск - мужчина 25-30 Санкт-Петербург'
                        f'Меню бота - Vkinder')
 
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
                     sex = 2
                 age_at = msg_text[8:10]
                 if int(age_at) < 18:
-                    write_msg(user_id, 'Выставлен минимальный возраст - 25 лет.')
+                    write_msg(user_id, 'Выставлен минимальный возраст - 18 лет.')
                     age_at = 18
                 age_to = msg_text[11:14]
                 if int(age_to) >= 100:
@@ -64,6 +64,7 @@ if __name__ == '__main__':
                 result = search_users(sex, int(age_at), int(age_to), city)
                 json_create(result)
                 current_user_id = check_db_master(user_id)
+                
                 for i in range(len(result)):
                     dating_user, blocked_user = check_db_user(result[i][3]
                     user_photo = get_photo(result[i][3])
@@ -85,3 +86,19 @@ if __name__ == '__main__':
                     if msg_text == '0':
                         if i >= len(result) - 1:
                             show_info()
+                                                              
+                    elif msg_text == '1'
+                        if i >= len(result) - 1:
+                            show_info()
+                            break
+                        try:
+                            add_user(user_id, result[i][3], result[i][1],
+                                     result[i][0], city, result[i][2], current_user_id.id)
+                            add_user_photos(user_id, sorted_user_photo[0][1],
+                                            sorted_user_photo[0][0], current_user_id.id)
+                        except AttributeError:
+                            write_msg(user_id, 'Вы не зарегистрировались!\n Введите Vkinder для перезагрузки бота')
+                            break
+                                                              
+                   elif msg_text == '2':
+                        go_to_favorites(user_id)
