@@ -114,3 +114,6 @@ def add_user_photos(event_id, link_photo, count_likes, id_dating_user):
         write_msg(event_id,
                   'Уже сохранено в избранном')
         return False
+      
+if name == 'main':
+    Base.metadata.create_all(engine)
