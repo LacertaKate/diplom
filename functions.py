@@ -37,7 +37,6 @@ def search_users(sex, age_at, age_to, city):
         ]
         all_persons.append(person)
     return all_persons
-    # return True
 
 def get_photo(user_owner_id):
     vk_ = vk_api.VkApi(token=user_token)
