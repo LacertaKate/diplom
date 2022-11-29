@@ -1,6 +1,8 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from functions import search_users, get_photo, sort_likes, json_create
+from classes import engine, Session, write_msg, register_user, add_user, add_user_photos,
+    check_db_user, check_db_favorites, check_db_master, delete_db_favorites
 from vk_tokens import group_token
 
 vk = vk_api.VkApi(token=group_token)
@@ -24,8 +26,7 @@ def menu_bot(id_num):
               f"Для регистрации введите - Да.\n"
               f"Если вы уже зарегистрированы - начинайте поиск.\n"
               f"\nДля поиска - мужчина 25-30 Санкт-Петербург\n")
-
-
+    
 def show_info():
     write_msg(user_id, f'Это была последняя анкета.'
                        f'Поиск - мужчина 25-30 Санкт-Петербург'
@@ -37,8 +38,29 @@ def reg_new_user(id_num):
     write_msg(id_num,
               f"Vkinder - для активации бота\n")
     register_user(id_num)
-    
-if __name__ == '__main__':
+  
+def go_to_favorites(ids):
+    alls_users = check_db_favorites(ids)
+    write_msg(ids, f'Избранные анкеты:')
+    for nums, users in enumerate(alls_users):
+        write_msg(ids, f'{users.first_name}, {users.second_name}, {users.link}')
+        write_msg(ids, '1 - Удалить из избранного, 0 - Далее \nq - Выход')
+        msg_texts, user_ids = loop_bot()
+        if msg_texts == '0':
+            if nums >= len(alls_users) - 1:
+                write_msg(user_ids, f'Это была последняя анкета.\n'
+                                    f'Vkinder - вернуться в меню\n')
+        elif msg_texts == '1':
+            delete_db_favorites(users.vk_id)
+            write_msg(user_ids, f'Анкета успешно удалена.')
+            if nums >= len(alls_users) - 1:
+                write_msg(user_ids, f'Это была последняя анкета.\n'
+                                    f'Vkinder - вернуться в меню\n')
+        elif msg_texts.lower() == 'q':
+            write_msg(ids, 'Vkinder - для активации бота.')
+            break
+
+if name == 'main':
     while True:
         msg_text, user_id = loop_bot()
         if msg_text == "vkinder":
@@ -81,7 +103,7 @@ if __name__ == '__main__':
                         for photo in range(len(sorted_user_photo)):
                             write_msg(user_id, f'фото:',
                                       attachment=sorted_user_photo[photo][1])
-                    write_msg(user_id, '1 - Добавить, 2 - Заблокировать, 0 - Далее, \nq - выход из поиска')
+                    write_msg(user_id, '1 - Добавить, 0 - Далее, \nq - выход из поиска')
                     msg_text, user_id = loop_bot()
                     if msg_text == '0':
                         if i >= len(result) - 1:
@@ -97,8 +119,5 @@ if __name__ == '__main__':
                             add_user_photos(user_id, sorted_user_photo[0][1],
                                             sorted_user_photo[0][0], current_user_id.id)
                         except AttributeError:
-                            write_msg(user_id, 'Вы не зарегистрировались!\n Введите Vkinder для перезагрузки бота')
+                            write_msg(user_id, 'Вы не зарегистрировались!\n Введите Vkinder для перезагрузки')
                             break
-                                                              
-                   elif msg_text == '2':
-                        go_to_favorites(user_id)
