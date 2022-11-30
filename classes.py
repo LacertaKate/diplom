@@ -18,12 +18,12 @@ session = Session()
 connection = engine.connect()
 
 class User(Base):
-    tablename = 'user'
+    __tablename__ = 'user'
     id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
     vk_id = sq.Column(sq.Integer, unique=True)
 
 class DatingUser(Base):
-    tablename = 'dating_user'
+    __tablename__ = 'dating_user'
     id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
     vk_id = sq.Column(sq.Integer, unique=True)
     first_name = sq.Column(sq.String)
@@ -33,7 +33,7 @@ class DatingUser(Base):
     id_user = sq.Column(sq.Integer, sq.ForeignKey('user.id', ondelete='CASCADE'))
 
 class Photos(Base):
-    tablename = 'photos'
+    __tablename__ = 'photos'
     id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
     link_photo = sq.Column(sq.String)
     count_likes = sq.Column(sq.Integer)
