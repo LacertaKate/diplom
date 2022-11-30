@@ -60,7 +60,7 @@ def go_to_favorites(ids):
             write_msg(ids, 'Vkinder - для активации бота.')
             break
 
-if __name__ == 'main':
+if __name__ == '__main__':
     while True:
         msg_text, user_id = loop_bot()
         if msg_text == "vkinder":
