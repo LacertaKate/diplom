@@ -12,40 +12,62 @@ longpoll = VkLongPoll(vk)
 session = Session()
 connection = engine.connect()
 
+def get_user_info(user_id):
+    user_info = {}
+    try:
+        response = vk_session.method('users.get', {'user_id': user_id,
+                                                   'v': 5.131,
+                                                   'fields': 'sex, status, age_at, age_to, has_photo, count, hometown'})
+        if response:
+            for key, value in response[0].items():
+                if key == 'city':
+                    user_info[key] = value['id']
+                else:
+                    user_info[key] = value
+        else:
+            write_msg(user_id, f'''Извините, что-то пошло не так.''')
+            return False
+        
+    except vk_api.exceptions.ApiError as e:
+        write_msg(user_id, f'''Извините, что-то пошло не так.''')
+        print(f'Error! {e}')
+    return user_info
 
-def search_users(sex, age_at, age_to, city):
+    
+def search_users(user_info):
     all_persons = []
     link_profile = 'https://vk.com/id'
     vk_ = vk_api.VkApi(token=user_token)
-    response = vk_.method('users.search',
-                          {'sort': 1,
-                           'sex': sex,
-                           'status': 1,
-                           'age_at': age_at,
-                           'age_to': age_to,
+    response = vk_.method('users.search', {
+                           'sex': 3 - user_info['sex'],
+                           'age_at': user_info['age'] - 3,
+                           'age_to': user_info['age'] + 3,
                            'has_photo': 1,
                            'count': 25,
                            'online': 1,
-                           'hometown': city
+                           'status': 6; 
+                           'hometown': user_info['hometown']
                            })
-    for element in response['items']:
-        person = [
-            element['first_name'],
-            element['last_name'],
-            link_profile + str(element['id']),
-            element['id']
-        ]
-        all_persons.append(person)
-    return all_persons
+     if response:
+            if response.get('items'):
+                return response.get('items')
+            write_msg(user_info['id'], 'Что-то пошло не так')
+            return False
+        write_msg(user_info['id'], 'Никого не нашли')
+        return False
+    except vk_api.exceptions.ApiError as e:
+        write_msg(user_info['id'], f'''Извините, что-то пошло не так.''')
+        print(f'Error! {e}')
 
-def get_photo(user_owner_id):
+
+def get_photo(user_id):
     vk_ = vk_api.VkApi(token=user_token)
     try:
         response = vk_.method('photos.get',
                               {
                                   'access_token': user_token,
                                   'v': V,
-                                  'owner_id': user_owner_id,
+                                  'owner_id': user_id,
                                   'album_id': 'profile',
                                   'count': 10,
                                   'extended': 1,
