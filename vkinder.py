@@ -1,8 +1,7 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from functions import search_users, get_photo, sort_likes, json_create
-from classes import engine, Session, write_msg, register_user, add_user, add_user_photos,
-    check_db_user, check_db_favorites, check_db_master, delete_db_favorites
+from classes import engine, Session, write_msg, register_user, add_user, add_user_photos, check_db_favorites, check_db_master, check_db_user, delete_db_favorites
 from vk_tokens import group_token
 
 vk = vk_api.VkApi(token=group_token)
@@ -13,10 +12,9 @@ connection = engine.connect()
 
 def loop_bot():
     for this_event in longpoll.listen():
-        if this_event.type == VkEventType.MESSAGE_NEW:
-            if this_event.to_me:
-                message_text = this_event.text
-                return message_text, this_event.user_id
+        if this_event.type == VkEventType.MESSAGE_NEW and this_event.to_me:
+            message_text = this_event.text
+            return message_text, this_event.user_id
 
 
 def menu_bot(id_num):
@@ -28,9 +26,7 @@ def menu_bot(id_num):
               f"\nДля поиска - мужчина 25-30 Санкт-Петербург\n")
     
 def show_info():
-    write_msg(user_id, f'Это была последняя анкета.'
-                       f'Поиск - мужчина 25-30 Санкт-Петербург'
-                       f'Меню бота - Vkinder')
+    write_msg(user_id, 'Это была последняя анкета.Поиск - мужчина 25-30 Санкт-ПетербургМеню бота - Vkinder')
 
 
 def reg_new_user(id_num):
@@ -41,7 +37,7 @@ def reg_new_user(id_num):
   
 def go_to_favorites(ids):
     alls_users = check_db_favorites(ids)
-    write_msg(ids, f'Избранные анкеты:')
+    write_msg(ids, 'Избранные анкеты:')
     for nums, users in enumerate(alls_users):
         write_msg(ids, f'{users.first_name}, {users.second_name}, {users.link}')
         write_msg(ids, '1 - Удалить из избранного, 0 - Далее \nq - Выход')
@@ -52,7 +48,7 @@ def go_to_favorites(ids):
                                     f'Vkinder - вернуться в меню\n')
         elif msg_texts == '1':
             delete_db_favorites(users.vk_id)
-            write_msg(user_ids, f'Анкета успешно удалена.')
+            write_msg(user_ids, 'Анкета успешно удалена.')
             if nums >= len(alls_users) - 1:
                 write_msg(user_ids, f'Это была последняя анкета.\n'
                                     f'Vkinder - вернуться в меню\n')
@@ -88,7 +84,7 @@ if __name__ == '__main__':
                 current_user_id = check_db_master(user_id)
                 
                 for i in range(len(result)):
-                    dating_user, blocked_user = check_db_user(result[i][3]
+                    dating_user, blocked_user = check_db_user(result[i][3])
                     user_photo = get_photo(result[i][3])
                     if user_photo == 'нет доступа к фото' or dating_user is not None or blocked_user is not None:
                         continue
