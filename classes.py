@@ -1,6 +1,7 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_tokens import group_token
+from functions import write_msg
 from random import randrange
 import sqlalchemy as sq
 from sqlalchemy.ext.declarative import declarative_base
@@ -46,27 +47,15 @@ def delete_db_favorites(ids):
     session.commit()
 
 def check_db_master(ids):
-    current_user_id = session.query(User).filter_by(vk_id=ids).first()
-    return current_user_id
+    return session.query(User).filter_by(vk_id=ids).first()
 
 def check_db_user(ids):
-    dating_user = session.query(DatingUser).filter_by(
-        vk_id=ids).first()
-    blocked_user = session.query(BlackList).filter_by(
-        vk_id=ids).first()
-    return dating_user, blocked_user
+    return session.query(DatingUser).filter_by(vk_id=ids).first()
   
- def check_db_favorites(ids):
+def check_db_favorites(ids):
     current_users_id = session.query(User).filter_by(vk_id=ids).first()
-    alls_users = session.query(DatingUser).filter_by(id_user=current_users_id.id).all()
-    return alls_users
+    return session.query(DatingUser).filter_by(id_user=current_users_id.id).all()
 
-def write_msg(user_id, message, attachment=None):
-    vk.method('messages.send',
-              {'user_id': user_id,
-               'message': message,
-               'random_id': randrange(10 ** 7),
-               'attachment': attachment})
 def register_user(vk_id):
     try:
         new_user = User(
