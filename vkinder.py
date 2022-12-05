@@ -1,6 +1,6 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
-from functions import search_users, get_photo, sort_likes, json_create, write_msg
+from functions import get_photo, sort_likes, json_create, write_msg
 from classes import engine, Session, register_user, add_user, add_user_photos, check_db_favorites, check_db_master, check_db_user, delete_db_favorites
 from vk_tokens import group_token
 
