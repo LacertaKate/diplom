@@ -5,7 +5,6 @@ import json
 import datetime
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_tokens import group_token, user_token, V
-from classes import write_msg
 from vk_api.exceptions import ApiError
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
