@@ -1,6 +1,6 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
-from functions import get_photo, sort_likes, json_create, write_msg
+from functions import get_user_info, get_photo, sort_likes, json_create, write_msg
 from classes import engine, Session, register_user, add_user, add_user_photos, check_db_favorites, check_db_master, check_db_user, delete_db_favorites
 from vk_tokens import group_token
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
                     write_msg(user_id, 'Выставлено максимальное значение 99 лет.')
                     age_to = 99
                 city = msg_text[14:len(msg_text)].lower()
-                result = search_users(sex, int(age_at), int(age_to), city)
+                result = get_user_info(sex, int(age_at), int(age_to), city)
                 json_create(result)
                 current_user_id = check_db_master(user_id)
                 
