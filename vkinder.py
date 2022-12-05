@@ -37,20 +37,20 @@ def reg_new_user(id_num):
     register_user(id_num)
   
 def go_to_favorites(ids):
-    alls_users = check_db_favorites(ids)
+    all_users = check_db_favorites(ids)
     write_msg(ids, 'Избранные анкеты:')
-    for nums, users in enumerate(alls_users):
+    for nums, users in enumerate(all_users):
         write_msg(ids, f'{users.first_name}, {users.second_name}, {users.link}')
         write_msg(ids, '1 - Удалить из избранного, 0 - Далее \nq - Выход')
         msg_texts, user_ids = loop_bot()
         if msg_texts == '0':
-            if nums >= len(alls_users) - 1:
+            if nums >= len(all_users) - 1:
                 write_msg(user_ids, f'Это была последняя анкета.\n'
                                     f'Vkinder - вернуться в меню\n')
         elif msg_texts == '1':
             delete_db_favorites(users.vk_id)
             write_msg(user_ids, 'Анкета успешно удалена.')
-            if nums >= len(alls_users) - 1:
+            if nums >= len(all_users) - 1:
                 write_msg(user_ids, f'Это была последняя анкета.\n'
                                     f'Vkinder - вернуться в меню\n')
         elif msg_texts.lower() == 'q':
