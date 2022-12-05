@@ -105,7 +105,7 @@ if __name__ == '__main__':
                     if msg_text == '0':
                         if i >= len(result) - 1:
                             show_info()                                 
-                    elif msg_text == '1'
+                    elif msg_text == '1':
                         if i >= len(result) - 1:
                             show_info()
                             break
