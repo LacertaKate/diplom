@@ -1,7 +1,8 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
-from functions import get_user_info, get_photo, sort_likes, json_create, write_msg
-from classes import engine, Session, register_user, add_user, add_user_photos, check_db_favorites, check_db_master, check_db_user, delete_db_favorites
+from classes import engine, Session, register_user, add_user, add_user_photos, check_db_favorites, check_db_master, \
+    check_db_user, delete_db_favorites
+from functions import get_user_info,get_photo, sort_likes, json_create, write_msg
 from vk_tokens import group_token
 
 vk = vk_api.VkApi(token=group_token)
@@ -103,8 +104,7 @@ if __name__ == '__main__':
                     msg_text, user_id = loop_bot()
                     if msg_text == '0':
                         if i >= len(result) - 1:
-                            show_info()
-                                                              
+                            show_info()                                 
                     elif msg_text == '1'
                         if i >= len(result) - 1:
                             show_info()
