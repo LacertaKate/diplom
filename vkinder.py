@@ -85,9 +85,9 @@ if __name__ == '__main__':
                 current_user_id = check_db_master(user_id)
                 
                 for i in range(len(result)):
-                    dating_user, blocked_user = check_db_user(result[i][3])
+                    dating_user = check_db_user(result[i][3])
                     user_photo = get_photo(result[i][3])
-                    if user_photo == 'нет доступа к фото' or dating_user is not None or blocked_user is not None:
+                    if user_photo == 'нет доступа к фото' or dating_user is not None:
                         continue
                     sorted_user_photo = sort_likes(user_photo)
                     write_msg(user_id, f'\n{result[i][0]}  {result[i][1]}  {result[i][2]}', )
