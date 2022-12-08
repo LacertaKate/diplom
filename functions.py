@@ -4,11 +4,11 @@ from random import randrange
 import vk_api
 from vk_api.exceptions import ApiError
 from vk_api.longpoll import VkLongPoll
-from vk_tokens import group_token, user_token, V
+from tokens import user_token, group_token, V
 
 vk_session = vk_api.VkApi(token=user_token)
 vk_session2 = vk_api.VkApi(token=group_token)
-longpoll = VkLongPoll(vk_session)
+longpoll = VkLongPoll(vk_session2)
 
 
 def get_user_info(user_id):
