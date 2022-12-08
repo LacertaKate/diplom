@@ -1,19 +1,15 @@
 import sqlalchemy as sq
-import vk_api
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from vk_api.longpoll import VkLongPoll
-from functions import write_msg
-from vk_tokens import group_token
+import functions
+
 
 Base = declarative_base()
-engine = sq.create_engine('postgresql://user@localhost:5432/vkinder_db',
+engine = sq.create_engine('postgresql://lackate@localhost:5432/vkinder',
                           client_encoding='utf8')
 Session = sessionmaker(bind=engine)
 
-vk = vk_api.VkApi(token=group_token)
-longpoll = VkLongPoll(vk)
 session = Session()
 connection = engine.connect()
 
@@ -86,12 +82,12 @@ def add_user(event_id, vk_id, first_name, second_name, city, link, id_user):
         )
         session.add(new_user)
         session.commit()
-        write_msg(event_id,
-                  'Успешно добавлен в избранное')
+        functions.write_msg(event_id,
+                            'Успешно добавлен в избранное')
         return True
     except (IntegrityError, InvalidRequestError):
-        write_msg(event_id,
-                  'Пользователь уже в избранном.')
+        functions.write_msg(event_id,
+                            'Пользователь уже в избранном.')
         return False
 
 
@@ -104,12 +100,12 @@ def add_user_photos(event_id, link_photo, count_likes, id_dating_user):
         )
         session.add(new_user)
         session.commit()
-        write_msg(event_id,
-                  'Фото пользователя сохранено в избранном')
+        functions.write_msg(event_id,
+                            'Фото пользователя сохранено в избранном')
         return True
     except (IntegrityError, InvalidRequestError):
-        write_msg(event_id,
-                  'Уже сохранено в избранном')
+        functions.write_msg(event_id,
+                            'Уже сохранено в избранном')
         return False
 
 
